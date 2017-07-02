@@ -10,6 +10,9 @@ const PLACEATTERN =/^bet:p:[0-9]+:[0-9]+/i;
 const EXACTAPATTERN =/^bet:e:[0-9]+,[0-9]+:[0-9]+/i;
 const RESULTPATTERN = /^result:[0-9]+:[0-9]+:[0-9]+/i;
 
+const HORSE_INDEX = 2;  // index in the input format
+const BET_AMOUNT_INDEX = 3;  // INdex in the input format
+
 class Bets {
     constructor(){
         this.winBets = [];
@@ -18,16 +21,20 @@ class Bets {
     }
 
     processInput(inputValue){
-        console.log( "Inside processinput",WINPATTERN.test( inputValue))
-
+       
         if( WINPATTERN.test( inputValue)){
             console.log( "win pattern");
+            this.processWinInput( inputValue);
+
         }else if( PLACEATTERN.test( inputValue)){
             console.log( "Place pattern");
+            this.processPlaceInput(inputValue);
         }else if( EXACTAPATTERN.test( inputValue)){
             console.log( "EXACTAPATTERN pattern");
+            this.processExactaInput(inputValue);
         }else if( RESULTPATTERN.test( inputValue)){
             console.log( "RESULTPATTERN pattern");
+            this.processResult( inputValue);
         }else{
             console.log( "invalid input, input discarded. Please enter a proper input or result")
         }
@@ -38,6 +45,42 @@ class Bets {
 
         // if( parsedInput[0])
         // switch( parsedInput[])
+    }
+
+    processWinInput(str){
+        var winInputArr = str.split(":");
+        console.log( winInputArr);
+        this.winBets.push({
+            horseNumber: winInputArr[HORSE_INDEX],
+            betAmount:winInputArr[BET_AMOUNT_INDEX]
+        });
+
+        console.log("Win Bets Arr", this.winBets);
+    }
+
+     processPlaceInput(str){
+        var placeInputArr = str.split(":");
+        this.placeBets.push({
+            horseNumber: placeInputArr[HORSE_INDEX],
+            betAmount:placeInputArr[BET_AMOUNT_INDEX]
+        });
+
+        console.log("place Arr", this.placeBets);
+    }
+
+     processExactaInput(str){
+        var exactaInputArr = str.split(":");
+        this.exactaBets.push({
+            horseNumber: exactaInputArr[HORSE_INDEX].split(','),
+            betAmount:exactaInputArr[BET_AMOUNT_INDEX]
+        });
+        console.log("Exacta Arr", this.exactaBets);
+    }
+
+    processResult(str){
+
+        console.log( "this -> ", this);
+
     }
 }
 
