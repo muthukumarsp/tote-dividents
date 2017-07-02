@@ -14,6 +14,7 @@
     "bluebird": "^3.5.0",
     "colors": "^1.1.2",
     "pkginfo": "0.x.x",
+    "prompt": "^1.0.0",
     "read": "1.0.x",
     "revalidator": "0.1.x",
     "utile": "0.3.x",
