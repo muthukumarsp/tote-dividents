@@ -1,0 +1,30 @@
+{
+  "name": "tote_divident_calculator",
+  "version": "1.0.0",
+  "description": "command line app for tote divident calculation",
+  "author": "muthukumarsp@gmail.com",
+  "maintainers": [
+    "muthukumarsp@gmail.com"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "gi://github.com/muthukumarsp/tote-dividents.git"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.0",
+    "colors": "^1.1.2",
+    "pkginfo": "0.x.x",
+    "read": "1.0.x",
+    "revalidator": "0.1.x",
+    "utile": "0.3.x",
+    "winston": "2.1.x"
+  },
+  "devDependencies": {
+    "vows": "0.7.0"
+  },
+  "main": "./lib/prompt",
+  "license": "MIT",
+  "engines": {
+    "node": ">= 0.6.6"
+  }
+}
