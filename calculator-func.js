@@ -9,11 +9,27 @@
 require('import-export');
 
 var WinBetsModule  = require('./win-bets.js');
-
+var PlaceBetsModule  = require('./place-bets.js');
 // var CalcUtilities = require('./divident-calc-utilities.js')
 var winBetsModule = new WinBetsModule();
 
+var placeBetsModule = new PlaceBetsModule();
 var horsesFinishSeq = [2, 3, 1];
+
+winBetsModule.addBets("bet:w:1:4")
+winBetsModule.addBets("bet:w:1:4")
+winBetsModule.addBets("bet:w:1:4")
+winBetsModule.addBets("bet:w:1:4")
+
+winBetsModule.calculateDivident( horsesFinishSeq[0]);
+
+console.log( winBetsModule.getResults())
+
+
+placeBetsModule.calculateDivident(horsesFinishSeq);
+console.log( placeBetsModule.getResults());
+
+
 
 // Total : 338
 // comm: 50.7
@@ -62,14 +78,7 @@ var horsesFinishSeq = [2, 3, 1];
 
 
 
-winBetsModule.addBets("bet:w:1:4")
-winBetsModule.addBets("bet:w:1:4")
-winBetsModule.addBets("bet:w:1:4")
-winBetsModule.addBets("bet:w:1:4")
 
-winBetsModule.calculateDivident( horsesFinishSeq[0]);
-
-console.log( winBetsModule.getResults())
 /*var pbArray = [
     {horseNumber: 1, betAmount: 31},
     {horseNumber: 2, betAmount: 89},

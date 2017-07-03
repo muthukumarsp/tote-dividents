@@ -5,7 +5,7 @@ constructor(){
 
 }
  totalBetAmountForhorseNumber(list, horseNumber) {
-     console.log('calc utilites called')
+    //  console.log('calc utilites called')
     var total = 0;
     list.forEach((b) => {
         if (b.horseNumber === horseNumber) {
@@ -16,7 +16,7 @@ constructor(){
  }
 
 
- totalbetAmount(list) {
+ totalBetAmount(list) {
     var total = 0;
     list.forEach((b) => {
         total += b.betAmount;

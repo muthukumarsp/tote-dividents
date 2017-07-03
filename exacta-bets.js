@@ -8,7 +8,7 @@ let BET_AMOUNT_INDEX = 3;  // INdex in the input format
 export default class WinBetsModule{
     
     constructor(){
-        // console.log( "const win bet module")
+        console.log( "const win bet module")
         this.winBetsList = [];
         this.calcUtilities  = new CalcUtilities();
         this.winBetsResult = {};
@@ -16,7 +16,7 @@ export default class WinBetsModule{
 
     addBets(betStr){
         var winInputArr = betStr.split(":");
-        // console.log( " Wind Bets : before adding",this.winBetsList);
+        console.log( " Wind Bets : before adding",this.winBetsList);
         this.winBetsList.push({
             horseNumber: parseInt(winInputArr[HORSE_INDEX]),
             betAmount:parseInt(winInputArr[BET_AMOUNT_INDEX])
@@ -29,7 +29,7 @@ export default class WinBetsModule{
         // this.winBetsList = this.getTestBets();  // uncomment for unit testing
         this.winBetsResult.winnerHorse = winningHorse;
 
-        var totalPool = this.calcUtilities.totalBetAmount(this.winBetsList),
+        var totalPool = this.calcUtilities.totalbetAmount(this.winBetsList),
                 winnerTotalBetAmount = 0,
                 remaining,
                 commission;
@@ -44,8 +44,8 @@ export default class WinBetsModule{
         }else{
             this.winBetsResult.divident = 'No Win bet for horse number : ' + this.winBetsResult.winnerHorse ;
         }
-        // console.log('totalPool', totalPool, 'winnerTotalBetAmount', winnerTotalBetAmount);
-        // console.log('this.winBetsResult', JSON.stringify(this.winBetsResult));
+        console.log('totalPool', totalPool, 'winnerTotalBetAmount', winnerTotalBetAmount);
+        console.log('this.winBetsResult', JSON.stringify(this.winBetsResult));
     }
     
     getResults(){
