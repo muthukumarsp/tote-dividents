@@ -11,8 +11,10 @@
     "url": "gi://github.com/muthukumarsp/tote-dividents.git"
   },
   "dependencies": {
+    "babel-register": "^6.24.1",
     "bluebird": "^3.5.0",
     "colors": "^1.1.2",
+    "import-export": "^1.0.1",
     "pkginfo": "0.x.x",
     "prompt": "^1.0.0",
     "read": "1.0.x",

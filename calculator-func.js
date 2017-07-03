@@ -2,91 +2,92 @@
  * Created by m.kumar on 3/07/2017.
  */
 
-console.log('test')
+// import { WinBetsModule } from './win-bets.js';
 
-var wbArray = [
-    {hNumber: 1, bAmount: 3},
-    {hNumber: 2, bAmount: 4},
-    {hNumber: 3, bAmount: 5},
-    {hNumber: 4, bAmount: 5},
-    {hNumber: 1, bAmount: 16},
-    {hNumber: 2, bAmount: 8},
-    {hNumber: 3, bAmount: 22},
-    {hNumber: 4, bAmount: 57},
-    {hNumber: 1, bAmount: 42},
-    {hNumber: 2, bAmount: 98},
-    {hNumber: 3, bAmount: 63},
-    {hNumber: 4, bAmount: 15}
-];
+// require('babel-register');
+// import WinBetsModule from './win-bets.js';
+require('import-export');
+
+var WinBetsModule  = require('./win-bets.js');
+
+// var CalcUtilities = require('./divident-calc-utilities.js')
+var winBetsModule = new WinBetsModule();
 
 var horsesFinishSeq = [2, 3, 1];
 
-var wbResult = {};
 // Total : 338
 // comm: 50.7
 // remaining = 287.3
 // placed amount : 110
 
-function totalBAmount(list) {
-    var total = 0;
-    list.forEach((b) => {
-        total += b.bAmount;
-    });
-    return total;
-}
+// function totalbetAmount(list) {
+//     var total = 0;
+//     list.forEach((b) => {
+//         total += b.betAmount;
+//     });
+//     return total;
+// }
 
-function totalBetAmountForHNumber(list, hNumber) {
-    var total = 0;
-    list.forEach((b) => {
-        if (b.hNumber === hNumber) {
-            total += b.bAmount;
-        }
-    });
-    return total;
-}
-function calcDividentWin(list, winnerHor) {
-    var totalPool = totalBAmount(list),
-        winnerBe = 0,
-        remaining,
-        commission;
-    //1. Calculate total amount
-    /*list.forEach((b) => {
-     if (b.hNumber === winnerHor) {
-     winnerBe += b.bAmount;
-     }
-     });*/
-    winnerBe = totalBetAmountForHNumber(list, winnerHor);
-    wbResult.totalPool = totalPool;
-    wbResult.winnerBe = winnerBe;
-    wbResult.commission = 15 * totalPool / 100; // 15%
-    wbResult.remaining = totalPool - wbResult.commission;
-    wbResult.divident = Math.round(wbResult.remaining / winnerBe * 100) / 100;
+// function totalBetAmountForhorseNumber(list, horseNumber) {
+//     var total = 0;
+//     list.forEach((b) => {
+//         if (b.horseNumber === horseNumber) {
+//             total += b.betAmount;
+//         }
+//     });
+//     return total;
+// }
+// function calcDividentWin(list, winnerHor) {
+//     var totalPool = totalbetAmount(list),
+//         winnerBe = 0,
+//         remaining,
+//         commission;
+//     //1. Calculate total amount
+//     /*list.forEach((b) => {
+//      if (b.horseNumber === winnerHor) {
+//      winnerBe += b.betAmount;
+//      }
+//      });*/
+//     winnerBe = totalBetAmountForhorseNumber(list, winnerHor);
+//     wbResult.totalPool = totalPool;
+//     wbResult.winnerBe = winnerBe;
+//     wbResult.commission = 15 * totalPool / 100; // 15%
+//     wbResult.remaining = totalPool - wbResult.commission;
+//     wbResult.divident = Math.round(wbResult.remaining / winnerBe * 100) / 100;
 
-    console.log('totalPool', totalPool, 'winnerBe', winnerBe);
-    console.log('wbResult', JSON.stringify(wbResult));
+//     console.log('totalPool', totalPool, 'winnerBe', winnerBe);
+//     console.log('wbResult', JSON.stringify(wbResult));
 
-}
+// }
 
-calcDividentWin(wbArray, horsesFinishSeq[0]);
 
-var pbArray = [
-    {hNumber: 1, bAmount: 31},
-    {hNumber: 2, bAmount: 89},
-    {hNumber: 3, bAmount: 28},
-    {hNumber: 4, bAmount: 72},
-    {hNumber: 1, bAmount: 40},
-    {hNumber: 2, bAmount: 16},
-    {hNumber: 3, bAmount: 82},
-    {hNumber: 4, bAmount: 52},
-    {hNumber: 1, bAmount: 18},
-    {hNumber: 2, bAmount: 74},
-    {hNumber: 3, bAmount: 39},
-    {hNumber: 4, bAmount: 105}
+
+winBetsModule.addBets("bet:w:1:4")
+winBetsModule.addBets("bet:w:1:4")
+winBetsModule.addBets("bet:w:1:4")
+winBetsModule.addBets("bet:w:1:4")
+
+winBetsModule.calculateDivident( horsesFinishSeq[0]);
+
+console.log( winBetsModule.getResults())
+/*var pbArray = [
+    {horseNumber: 1, betAmount: 31},
+    {horseNumber: 2, betAmount: 89},
+    {horseNumber: 3, betAmount: 28},
+    {horseNumber: 4, betAmount: 72},
+    {horseNumber: 1, betAmount: 40},
+    {horseNumber: 2, betAmount: 16},
+    {horseNumber: 3, betAmount: 82},
+    {horseNumber: 4, betAmount: 52},
+    {horseNumber: 1, betAmount: 18},
+    {horseNumber: 2, betAmount: 74},
+    {horseNumber: 3, betAmount: 39},
+    {horseNumber: 4, betAmount: 105}
 ];
 
-var pBResult = {};
+ var pBResult = {};
 function calcDividentPlace(list, winSeq) {
-    var totalPool = totalBAmount(list),
+    var totalPool = totalbetAmount(list),
         winnerBe = 0,
         remaining,
         commission,
@@ -103,8 +104,8 @@ function calcDividentPlace(list, winSeq) {
 
     for (var i = 0; i < winSeq.length; i++) {
         pBResult.seqDividents.push({
-            hNumber: winSeq[i],
-            divident: Math.round(100 * ( pBResult.remaining / (totalBetAmountForHNumber(list, winSeq[i]) * 3))) / 100  // one third for each group divided by total
+            horseNumber: winSeq[i],
+            divident: Math.round(100 * ( pBResult.remaining / (totalBetAmountForhorseNumber(list, winSeq[i]) * 3))) / 100  // one third for each group divided by total
         })
     }
     console.log(JSON.stringify(pBResult));
@@ -114,18 +115,18 @@ function calcDividentPlace(list, winSeq) {
 calcDividentPlace(pbArray, horsesFinishSeq);
 
 var pEArray = [
-    {hSeqence: '1,2', bAmount: 13},
-    {hSeqence: '2,3', bAmount: 98},
-    {hSeqence: '1,3', bAmount: 82},
-    {hSeqence: '3,2', bAmount: 27},
-    {hSeqence: '1,2', bAmount: 5},
-    {hSeqence: '2,3', bAmount: 61},
-    {hSeqence: '1,3', bAmount: 28},
-    {hSeqence: '3,2', bAmount: 25},
-    {hSeqence: '1,2', bAmount: 81},
-    {hSeqence: '2,3', bAmount: 47},
-    {hSeqence: '1,3', bAmount: 93},
-    {hSeqence: '3,2', bAmount: 51}
+    {hSeqence: '1,2', betAmount: 13},
+    {hSeqence: '2,3', betAmount: 98},
+    {hSeqence: '1,3', betAmount: 82},
+    {hSeqence: '3,2', betAmount: 27},
+    {hSeqence: '1,2', betAmount: 5},
+    {hSeqence: '2,3', betAmount: 61},
+    {hSeqence: '1,3', betAmount: 28},
+    {hSeqence: '3,2', betAmount: 25},
+    {hSeqence: '1,2', betAmount: 81},
+    {hSeqence: '2,3', betAmount: 47},
+    {hSeqence: '1,3', betAmount: 93},
+    {hSeqence: '3,2', betAmount: 51}
 ];
 var pEResult = {};
 
@@ -134,13 +135,13 @@ function totalAmountWithSequence(list, seq) {
     var total = 0;
     list.forEach((b) => {
         if (b.hSeqence === seq) {
-            total += b.bAmount;
+            total += b.betAmount;
         }
     });
     return total;
 }
 function calcDividentExacta(list, winSeq) {
-    var totalPool = totalBAmount(list)
+    var totalPool = totalbetAmount(list)
 
     pEResult.totalPool = totalPool;
     pEResult.commission = 18 * totalPool / 100; // 18%
@@ -152,3 +153,4 @@ function calcDividentExacta(list, winSeq) {
 }
 
 calcDividentExacta(pEArray, horsesFinishSeq);
+*/
