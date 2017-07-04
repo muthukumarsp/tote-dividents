@@ -24,4 +24,14 @@ constructor(){
     return total;
 }
 
+ totalAmountWithSequence(list, seq) {
+    var total = 0;
+    list.forEach((b) => {
+        if (b.horseSeqence === seq) {
+            total += b.betAmount;
+        }
+    });
+    return total;
+}
+
 }

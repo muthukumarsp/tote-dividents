@@ -10,10 +10,12 @@ require('import-export');
 
 var WinBetsModule  = require('./win-bets.js');
 var PlaceBetsModule  = require('./place-bets.js');
+var ExactaBetsModule  = require('./exacta-bets.js');
 // var CalcUtilities = require('./divident-calc-utilities.js')
 var winBetsModule = new WinBetsModule();
-
 var placeBetsModule = new PlaceBetsModule();
+var exactaBetsModule = new ExactaBetsModule();
+
 var horsesFinishSeq = [2, 3, 1];
 
 winBetsModule.addBets("bet:w:1:4")
@@ -28,6 +30,12 @@ console.log( winBetsModule.getResults())
 
 placeBetsModule.calculateDivident(horsesFinishSeq);
 console.log( placeBetsModule.getResults());
+
+
+exactaBetsModule.calculateDivident(horsesFinishSeq);
+console.log( exactaBetsModule.getResults());
+
+
 
 
 

@@ -5,7 +5,7 @@ let CalcUtilities = require('./divident-calc-utilities.js')
 let HORSE_INDEX = 2;  // index in the input format
 let BET_AMOUNT_INDEX = 3;  // INdex in the input format
 
-export default class WinBetsModule{
+export default class PlaceBetsModule{
     
     constructor(){
         // console.log( "const place bet module")
