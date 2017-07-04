@@ -1,189 +1,89 @@
-// let _ = require('lodash');
+require('import-export');
 const prompt = require('prompt');
 const Promise = require('bluebird');
 
+WinBetsModule = require('./win-bets.js');
+PlaceBetsModule = require('./place-bets.js');
+ExactaBetsModule = require('./exacta-bets.js');
 
 prompt.get = Promise.promisify(prompt.get);
 prompt.message = '';
 prompt.delimiter = '';
 
-const WINPATTERN =/^bet:w:[0-9]+:[0-9]+/i;
-const PLACEATTERN =/^bet:p:[0-9]+:[0-9]+/i;
-const EXACTAPATTERN =/^bet:e:[0-9]+,[0-9]+:[0-9]+/i;
+const WINPATTERN = /^bet:w:[0-9]+:[0-9]+/i;
+const PLACEATTERN = /^bet:p:[0-9]+:[0-9]+/i;
+const EXACTAPATTERN = /^bet:e:[0-9]+,[0-9]+:[0-9]+/i;
 const RESULTPATTERN = /^result:[0-9]+:[0-9]+:[0-9]+/i;
 
-const HORSE_INDEX = 2;  // index in the input format
-const BET_AMOUNT_INDEX = 3;  // INdex in the input format
-
-class Bets {
-    constructor(){
-        this.winBets = [];
-        this.placeBets = [];
-        this.exactaBets = [];
+class BettingConsole {
+    constructor() {
+        this.winBetsModule = new WinBetsModule();
+        this.placeBetsModule = new PlaceBetsModule();
+        this.exactaBetsModule = new ExactaBetsModule();
         this.horsesFinishSeq;
-
-        this.winResultDetails={};
-        this.placeResultDetails={};
-        this.exactaResultDetails={};
     }
 
-    processInput(inputValue){
-       
-        if( WINPATTERN.test( inputValue)){
-            console.log( "win pattern");
-            this.processWinInput( inputValue);
-
-        }else if( PLACEATTERN.test( inputValue)){
-            console.log( "Place pattern");
-            this.processPlaceInput(inputValue);
-        }else if( EXACTAPATTERN.test( inputValue)){
-            console.log( "EXACTAPATTERN pattern");
-            this.processExactaInput(inputValue);
-        }else if( RESULTPATTERN.test( inputValue)){
-            console.log( "RESULTPATTERN pattern");
-            this.processResult( inputValue);
+    processInput(inputValue) {
+        if (WINPATTERN.test(inputValue)) {
+            this.winBetsModule.addBets(inputValue);
+        } else if (PLACEATTERN.test(inputValue)) {
+            this.placeBetsModule.addBets(inputValue);
+        } else if (EXACTAPATTERN.test(inputValue)) {
+            this.exactaBetsModule.addBets(inputValue);
+        } else if (RESULTPATTERN.test(inputValue)) {
+            this.processResult(inputValue);
             process.exit();
-        }else{
-            console.log( "invalid input, input discarded. Please enter a proper input or result")
+        } else {
+            console.log("invalid input, input discarded. Please enter a proper input or result")
         }
     }
 
-    processWinInput(str){
-        var winInputArr = str.split(":");
-        console.log( "before adding",this.winBets);
-        this.winBets.push({
-            horseNumber: parseInt(winInputArr[HORSE_INDEX]),
-            betAmount:parseInt(winInputArr[BET_AMOUNT_INDEX])
-        });
-
-        console.log("Win Bets Arr", this.winBets);
-    }
-
-     processPlaceInput(str){
-        var placeInputArr = str.split(":");
-        this.placeBets.push({
-            horseNumber: parseInt(placeInputArr[HORSE_INDEX]),
-            betAmount:parseInt(placeInputArr[BET_AMOUNT_INDEX])
-        });
-
-        console.log("place Arr", this.placeBets);
-    }
-
-     processExactaInput(str){
-        var exactaInputArr = str.split(":");
-        this.exactaBets.push({
-            horseNumber: exactaInputArr[HORSE_INDEX].split(','),
-            betAmount:parseInt(exactaInputArr[BET_AMOUNT_INDEX])
-        });
-
-        console.log("Exacta Arr", this.exactaBets);
-    }
-
-    processResult(str){
-        console.log( "process Result")
+    processResult(str) {
         this.horsesFinishSeq = str.split(":").splice(1);
-        this.calcDividentWin(this.winBets, parseInt(this.horsesFinishSeq[0]));
-        // this.calcDividentPlaces();
-        // this.calcDividentExacta();
-        console.log("result sequence", this.horsesFinishSeq);
-    }
 
-    calcDividentWin(bets, horseNumber_winner){
+        // chang the horse number from string to number
+        for (var i = 0; i < this.horsesFinishSeq.length; i++) {
+            this.horsesFinishSeq[i] = parseInt(this.horsesFinishSeq[i]);
+        }
 
-    console.log( horseNumber_winner);
-        // Total : 338 
+        this.winBetsModule.calculateDivident(this.horsesFinishSeq[0]);
+        console.log(this.winBetsModule.getResults())
 
-        // comm: 50.7
+        this.placeBetsModule.calculateDivident(this.horsesFinishSeq);
+        console.log(this.placeBetsModule.getResults());
 
-        // remaining = 287.3
-
-        // placed amount : 110 
-
-        var totalPoolAmount =0 , commission, totalWinningBetAmount=0, dividentPerDoller;
-        var result = {};
-        // totalPoolAmount = _.reduce(_.filter(this.winBets, (bet) => { return bet.betAmount}), function(sum, n) {
-        //     return sum + n;
-        // }, 0);
-        console.log( "this -> winBets", bets);
-        bets.forEach( (bet, index) =>{
-            totalPoolAmount += bet.betAmount;
-            if( bet.horseNumber === horseNumber_winner){
-                console.log( "inside if")
-                totalWinningBetAmount  += bet.betAmount;
-            }
-        });
-        console.log( "total Pool amount", totalPoolAmount,"totalWinningBetAmount = ",totalWinningBetAmount);
-        // var  = bets.filter( (bet) => { return bet.horseNumber === horseNumber_winner});
-
-        // winningBetsFiltered.forEach( (bet, index) =>{
-        //     totalWinningBetAmount += bet.betAmount;
-            
-        // });
-        result.poolTotal = totalPoolAmount;
-        result.commission = 15 * totalPoolAmount/100;
-        result.remainingDividents = result.totalPoolAmount - result.commission;
-
-       
-        console.log( "winning bet  amount", totalWinningBetAmount);
-
-    }
-    calcDividentPlaces(){
-
-    }
-    calcDividentExacta(){
-
-    }
-
-     getSum(total, num) {
-         console.log( "getsum")
-        return total + Math.round(num);
+        this.exactaBetsModule.calculateDivident(this.horsesFinishSeq);
+        console.log(this.exactaBetsModule.getResults());
     }
 }
 
-
-var betsObj = new Bets();
-
-
+// Main app module.
+var bettingConsole = new BettingConsole();
 
 /**
  * Await command
  */
 function awaitCommand() {
 
-  //Start prompt
-  prompt.start();
-  prompt.get({
-    name: 'command',
-    description: 'Enter command:',
-  })
-    .then(result => result.command)
-    .then(command => {
-      //Do stuff
-      
-      if ( command.substr(0, 6).toLowerCase() === 'result') {
-          console.log('Proces finished command', command);
-           betsObj.processInput(command);
-        //    throw('finished')
-           // process.exit();
-        //    prompt.stop();
-       
-      }else{
-          betsObj.processInput(command);
-      }
-
+    //Start prompt
+    prompt.start();
+    prompt.get({
+        name: 'command',
+        description: 'Enter command:',
     })
-    .catch(error => {
-        console.log( "error thrown",error);
-      //Prompt cancelled, exit process
-    
-      if (error === 'finished') {
-        console.log( 'exiting process. Error Message =', error)
-        process.exit(1);
-      }else if(error.message == 'canceled'){
-          process.exit(1);
-      }
-    })
-    .then(awaitCommand); //<-- wait for next prompt
+        .then(result => result.command)
+        .then(command => {
+            //Do stuff
+            bettingConsole.processInput(command);
+        })
+        .catch(error => {
+            //console.log( "error thrown",error);
+            //Prompt cancelled, exit process
+            if (error.message == 'canceled') {
+                process.exit(1);
+            }
+        })
+        .then(awaitCommand); //<-- wait for next prompt
 }
 
 //Start prompt
